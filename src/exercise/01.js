@@ -4,7 +4,13 @@
 import * as React from 'react'
 
 function countReducer(state, action) {
-  return {...state, ...action}
+  // if (typeof action === 'function') {
+  //   return action(state)
+  // } else {
+  //   return {...state, ...action}
+  // }
+  // Or more nicely:
+  return {...state, ...(typeof action === 'function' ? action(state) : action)}
 }
 
 function Counter({initialCount = 0, step = 1}) {
@@ -20,7 +26,9 @@ function Counter({initialCount = 0, step = 1}) {
   // The 2nd argument is called "newState" - the value passed to setCount
 
   const {count} = state
-  const increment = () => setState({count: count + step})
+  // const increment = () => setState({count: count + step})
+  const increment = () =>
+    setState(currentState => ({count: currentState.count + step}))
   return <button onClick={increment}>{count}</button>
 }
 
